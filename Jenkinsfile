@@ -45,9 +45,9 @@ pipeline {
         stage('Build image') {
             steps {
                  script {
-                   buildImage 'alexpatroi/my-jenkins:jma-5.9'
+                   buildImage 'patroialexandru/my-jenkins:jma-1.0'
                    dockerLogin()
-                   dockerPush 'alexpatroi/my-jenkins:jma-5.9'
+                   dockerPush 'patroialexandru/my-jenkins:jma-1.0'
                 }
             }
         }
