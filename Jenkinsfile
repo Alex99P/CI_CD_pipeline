@@ -1,13 +1,13 @@
 #!/usr/bin/env groovy
 // this library it's global and defined in jenkins
-// @Library('jenkins-shared-library') //we put ' _ ', if don't have other variables after Library
+@Library('jenkins-shared-library') //we put ' _ ', if don't have other variables after Library
 
 // this library can to use just in this project, it not globally
-library identifier: 'jenkins-shared-library@master', retriver: modernSCM(
-    [$class: 'GitSCMSource',
-    remote: 'https://github.com/Alex99P/jenkins-shared-library.git',
-    credentialsID:'github-credentials']
-)
+// library identifier: 'jenkins-shared-library@master', retriver: modernSCM(
+//     [$class: 'GitSCMSource',
+//     remote: 'https://github.com/Alex99P/jenkins-shared-library.git',
+//     credentialsID:'github-credentials']
+// )
 
 
 def gv
@@ -45,9 +45,9 @@ pipeline {
         stage('Build image') {
             steps {
                  script {
-                   buildImage 'alexpatroi/my-jenkins:jma-1.0'
+                   buildImage 'patroialexandru/my-jenkins:jma-1.0'
                    dockerLogin()
-                   dockerPush 'alexpatroi/my-jenkins:jma-1.0'
+                   dockerPush 'patroialexandru/my-jenkins:jma-1.0'
                 }
             }
         }
