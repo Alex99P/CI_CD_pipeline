@@ -7,7 +7,6 @@ library identifier: 'jenkins-shared-library@master', retriver: modernSCM(
     [$class: 'GitSCMSource',
     remote: 'https://github.com/Alex99P/jenkins-shared-library.git',
     credentialsID:'1c50f359-09e8-49ee-9088-80c8f722fabf']
-    // change the credentials
 )
 
 
@@ -46,9 +45,9 @@ pipeline {
         stage('Build image') {
             steps {
                  script {
-                   buildImage 'patroialexandru/my-jenkins:jma-1.0'
+                   buildImage 'alexpatroi/my-jenkins:jma-5.9'
                    dockerLogin()
-                   dockerPush 'patroialexandru/my-jenkins:jma-1.0'
+                   dockerPush 'alexpatroi/my-jenkins:jma-5.9'
                 }
             }
         }
