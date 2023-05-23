@@ -42,14 +42,14 @@ pipeline {
                 }
             }
         }
-        stage('Build image') {
-            steps {
-                 script {
-                   buildImage 'patroialexandru/my-jenkins:jma-1.0'
-                   dockerLogin()
-                   dockerPush 'patroialexandru/my-jenkins:jma-1.0'
-                }
-            }
-        }
+        // stage('Build image') {
+        //     steps {
+        //          script {
+        //            buildImage 'patroialexandru/my-jenkins:jma-1.0'
+        //            dockerLogin()
+        //            dockerPush 'patroialexandru/my-jenkins:jma-1.0'
+        //         }
+        //     }
+        // }
     }
 }
