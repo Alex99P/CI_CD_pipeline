@@ -54,6 +54,9 @@ pipeline {
                 }
             }
         }
+        stage('provision server'){
+            // tf provision server
+        }
         stage('Connect to ec2'){
             steps {
                 script {
