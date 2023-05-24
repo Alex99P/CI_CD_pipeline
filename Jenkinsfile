@@ -56,7 +56,7 @@ pipeline {
                 script {
                     def dockerCMD = 'docker run -p 3080:3080 -d patroialexandru/my-jenkins:jma-1.0'
                     sshagent(['ec2-user-id-rsa']) {
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@3.74.158.201 ${dockerCMD}"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-74-158-201.eu-central-1.compute.amazonaws.com ${dockerCMD}"
                 }
                     
                 }
