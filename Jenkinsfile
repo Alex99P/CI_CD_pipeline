@@ -55,16 +55,33 @@ pipeline {
             }
         }
         stage('provision server'){
-            // tf provision server
-        }
-        stage('Connect to ec2'){
-            steps {
-                script {
-                    def dockerCMD = 'docker run -p 3080:3080 -d patroialexandru/my-jenkins:jma-1.0'
-                    sshagent(['ec2-user-id-rsa']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-74-158-201.eu-central-1.compute.amazonaws.com ${dockerCMD}"
+            // we set the env var for terraform
+            // we seting the credential to connect to aws account
+            environment { 
+                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
+                TF_VAR_env_prefix = 'test'
+            }
+            steps{
+                script{
+                    dir('terraform'){ //enter in terraform dir
+                        sh "terraform init"
+                        sh "terraform apply --auto-approve"
+                    }
+
                 }
-                    
+            }
+        }
+        stage('Deploy') {
+            steps {
+                 script {
+                    def shellCmd = "bash ./server-cmd.sh ${IMAGE_NAME}"
+                    def ec2Instance="ec2-user@3.66.236.147"
+                    sshagent(['ec2-sever-key']) {
+                        sh "scp server-cmd.sh ${ec2Instance}:/home/ec2-user"
+                        sh "scp docker-compose.yaml ec2-user@3.66.236.147:/home/ec2-user"
+                        sh "ssh -o StrictHostKeyChecking=no  ec2-user@3.66.236.147 ${shellCmd}"
+                    }
                 }
             }
         }
