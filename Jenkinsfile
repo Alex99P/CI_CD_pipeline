@@ -17,7 +17,9 @@ pipeline {
     tools{
         maven 'maven'
     }
-
+    environment {
+        IMAGE_NAME ='patroialexandru/my-jenkins:jma-2.0'
+    }
     stages {
         stage('init'){
             steps {
@@ -45,9 +47,10 @@ pipeline {
         stage('Build image') {
             steps {
                  script {
-                   buildImage 'patroialexandru/my-jenkins:jma-1.0'
+                //    buildImage 'patroialexandru/my-jenkins:jma-1.0'
+                   buildImage(env.IMAGE_NAME)
                    dockerLogin()
-                   dockerPush 'patroialexandru/my-jenkins:jma-1.0'
+                   dockerPush(env.IMAGE_NAME)
                 }
             }
         }
