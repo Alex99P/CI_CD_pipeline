@@ -53,8 +53,9 @@ pipeline {
         }
         stage('Connect to ec2'){
             steps {
-                def dockerCMD = 'docker run -p 3080:3080 -d patroialexandru/my-jenkins:jma-1.0'
-                script {sshagent(['ec2-user-id-rsa']) {
+                script {
+                    def dockerCMD = 'docker run -p 3080:3080 -d patroialexandru/my-jenkins:jma-1.0'
+                    sshagent(['ec2-user-id-rsa']) {
                     sh "ssh -o StrictHostKeyChecking=no ec2-user@3.74.158.201 ${dockerCMD}"
                 }
                     
