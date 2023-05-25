@@ -1,4 +1,11 @@
-# providers need to be installed
+terraform {
+  required_version = ">=0.12"
+  backend "s3" {
+    bucket = "myapp-bucket-alex"
+    key = "myapp/state.tfstate"
+    region = "eu-central-1"
+  }
+}
 provider "aws" {
   region = var.region
 }
