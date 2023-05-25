@@ -9,9 +9,6 @@ library identifier: 'jenkins-shared-library@develop', retriver: modernSCM(
     credentialsID:'github-credentials']
 )
 
-
-def gv
-
 pipeline {
     agent any
     tools{
@@ -52,6 +49,7 @@ pipeline {
                     dir('terraform'){ //enter in terraform dir
                         sh "terraform init"
                         sh "terraform apply --auto-approve"
+                        // to take ec2 public ip from terraform
                         EC2_PUBLIC_IP=sh(
                             script: "terraform output ec2_public_ip",
                             returnStdout: true
@@ -68,10 +66,11 @@ pipeline {
             steps {
                  script {
                     // Give time to server initialization
-                    echo "waiting for EC@ server to initialize"
+                    echo "waiting for EC2 server to initialize"
                     sleep(time:110 , unit: "SECONDS")
                     echo "$EC2_PUBLIC_IP"
 
+                    // send parameters to script
                     def shellCmd = "bash ./server-cmd.sh ${IMAGE_NAME} ${DOCKER_CREDS_USR} ${DOCKER_CREDS_PSW}"
                     def ec2Instance="ec2-user@${EC2_PUBLIC_IP}"
                     sshagent(['server-ssh-key']) {
