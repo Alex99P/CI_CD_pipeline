@@ -96,10 +96,11 @@ resource "aws_instance" "myapp-server" {
 
   associate_public_ip_address = true  # can be accessed from the browser
   key_name = "jenkins_key"
+  
+  user_data = file("terraform/entry-script.sh")
   tags = {
     Name : "${var.env_prefix}-server"
   }
-user_data = file("entry-script.sh")
 }
 
 output "ec2_public_ip" {
