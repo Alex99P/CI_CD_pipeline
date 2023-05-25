@@ -67,6 +67,10 @@ pipeline {
                     dir('terraform'){ //enter in terraform dir
                         sh "terraform init"
                         sh "terraform apply --auto-approve"
+                        EC2_PUBLIC_IP=sh(
+                            script: "terraform output ec2_public_ip"
+                            returnStdout: true
+                            ).trim()
                     }
 
                 }
@@ -75,12 +79,17 @@ pipeline {
         stage('Deploy') {
             steps {
                  script {
+                    // Give time to server initialization
+                    echo "waiting for EC@ server to initialize"
+                    sleep(time:110 , unit: "SECONDS")
+                    echo "$EC2_PUBLIC_IP"
+
                     def shellCmd = "bash ./server-cmd.sh ${IMAGE_NAME}"
-                    def ec2Instance="ec2-user@3.66.236.147"
-                    sshagent(['ec2-sever-key']) {
-                        sh "scp server-cmd.sh ${ec2Instance}:/home/ec2-user"
-                        sh "scp docker-compose.yaml ec2-user@3.66.236.147:/home/ec2-user"
-                        sh "ssh -o StrictHostKeyChecking=no  ec2-user@3.66.236.147 ${shellCmd}"
+                    def ec2Instance="ec2-user@${EC2_PUBLIC_IP}"
+                    sshagent(['server-ssh-key']) {
+                        sh "scp -o StrictHostKeyChecking=no server-cmd.sh ${ec2Instance}:/home/ec2-user"
+                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
+                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
                     }
                 }
             }
