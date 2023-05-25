@@ -21,21 +21,6 @@ pipeline {
         IMAGE_NAME ='patroialexandru/my-jenkins:jma-2.0'
     }
     stages {
-        stage('init'){
-            steps {
-                script{
-                    gv = load "script.groovy"
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    echo "Testing the application.."
-                    echo "Executing pipeline for branch $BRANCH_NAME"
-                }
-            }
-        }
         stage('Build jar') {
             steps {
                  script {
