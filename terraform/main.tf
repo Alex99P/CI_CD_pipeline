@@ -1,6 +1,6 @@
 # providers need to be installed
 provider "aws" {
-  region = ver.region
+  region = var.region
 }
 
 resource "aws_vpc" "myapp-vpc" {
